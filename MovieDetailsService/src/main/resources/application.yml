@@ -1,0 +1,9 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: movie-details-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
