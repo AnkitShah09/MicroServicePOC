@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviecatalog.entity.Movie;
 import com.moviecatalog.model.MovieDTO;
@@ -34,12 +35,12 @@ public class MovieCatalogServiceImpl implements MovieCatalogService {
 		}
 		Integer movieDetailsId = movie.getMovieDetailsId();
 		Integer movieRatingsId = movie.getMovieRatingsId();
-		LinkedHashMap movieDetails = restTemplate
-				.getForObject("http://movie-details-service/moviedetails/byId/" + movieDetailsId, LinkedHashMap.class);
-		String movieDescription = movieDetails.get("description").toString();
-		LinkedHashMap movieRatings = restTemplate
-				.getForObject("http://movie-ratings-service/movieratings/byId/" + movieRatingsId, LinkedHashMap.class);
-		String movieRating = movieRatings.get("ratings").toString();
+		JsonNode movieDetailsObject = restTemplate
+				.getForObject("http://movie-details-service/moviedetails/byId/" + movieDetailsId, JsonNode.class);
+		String movieDescription = movieDetailsObject.get("description").asText();
+		JsonNode movieRatingsObject = restTemplate
+				.getForObject("http://movie-ratings-service/movieratings/byId/" + movieRatingsId, JsonNode.class);
+		String movieRating = movieRatingsObject.get("ratings").toString();
 		MovieDTO movieDTO = new MovieDTO(movieName, movieDescription, movieRating);
 		try {
 			return objectMapper.writeValueAsString(movieDTO);
