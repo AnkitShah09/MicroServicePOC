@@ -1,7 +1,5 @@
 package com.moviecatalog.serviceImpl;
 
-import java.util.LinkedHashMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviecatalog.entity.Movie;
+import com.moviecatalog.feignClient.MovieRatingsFeignClient;
 import com.moviecatalog.model.MovieDTO;
 import com.moviecatalog.repo.MovieCatalogRepo;
 import com.moviecatalog.service.MovieCatalogService;
@@ -19,6 +18,9 @@ public class MovieCatalogServiceImpl implements MovieCatalogService {
 
 	@Autowired
 	RestTemplate restTemplate;
+
+	@Autowired
+	MovieRatingsFeignClient movieRatingsFeignProxy;
 
 	@Autowired
 	MovieCatalogRepo movieCatalogRepo;
@@ -38,8 +40,13 @@ public class MovieCatalogServiceImpl implements MovieCatalogService {
 		JsonNode movieDetailsObject = restTemplate
 				.getForObject("http://movie-details-service/moviedetails/byId/" + movieDetailsId, JsonNode.class);
 		String movieDescription = movieDetailsObject.get("description").asText();
-		JsonNode movieRatingsObject = restTemplate
-				.getForObject("http://movie-ratings-service/movieratings/byId/" + movieRatingsId, JsonNode.class);
+		String movieRatingsObjectString = movieRatingsFeignProxy.getMovieRatingsById(movieRatingsId);
+		JsonNode movieRatingsObject = null;
+		try {
+			movieRatingsObject = objectMapper.readTree(movieRatingsObjectString);
+		} catch (JsonProcessingException e) {
+			return e.getLocalizedMessage();
+		}
 		String movieRating = movieRatingsObject.get("ratings").toString();
 		MovieDTO movieDTO = new MovieDTO(movieName, movieDescription, movieRating);
 		try {

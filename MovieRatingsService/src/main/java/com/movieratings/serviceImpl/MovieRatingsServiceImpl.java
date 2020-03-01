@@ -31,9 +31,9 @@ public class MovieRatingsServiceImpl implements MovieRatingsService {
 	}
 
 	@Override
-	public String getMovieRatingsByMovieId(String movieId) {
+	public String getMovieRatingsByMovieId(Integer movieId) {
 		String errorMessage;
-		Optional<MovieRating> movie = movieRatingsRepo.findById(Integer.parseInt(movieId));
+		Optional<MovieRating> movie = movieRatingsRepo.findById(movieId);
 		if (movie.isPresent()) {
 			try {
 				return objectMapper.writeValueAsString(movie);

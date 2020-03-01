@@ -15,3 +15,5 @@ spring:  application:    name: movie-catalog-service
 eureka:  instance:    lease-renewal-interval-in-seconds: 30
   client:    service-url:
       defaultZone: http://localhost:8761/eureka/
+      
+movie-ratings-client : "http://movie-ratings-service/movieratings"

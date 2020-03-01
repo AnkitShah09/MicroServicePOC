@@ -21,7 +21,7 @@ public class MovieRatingsController {
 	}
 
 	@GetMapping(value = "/byId/{movieId}", produces = "application/json")
-	public String getMovieRatingsById(@PathVariable("movieId") String movieId) {
+	public String getMovieRatingsById(@PathVariable("movieId") Integer movieId) {
 		return movieRatingsService.getMovieRatingsByMovieId(movieId);
 	}
 }
