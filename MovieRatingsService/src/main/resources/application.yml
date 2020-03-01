@@ -4,13 +4,16 @@ spring:
   application:
     name: movie-ratings-service
   datasource:
-    driver-class-name: com.mysql.jdbc.driver
-    url: jdbc.mysql://localhost:3306/movieratingsservice
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/movieratingsservice?createDatabaseIfNotExist=true&useSSL=false
     username: root
     password: root
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.MySQL5Dialect
 eureka:
   instance:
     lease-renewal-interval-in-seconds: 30

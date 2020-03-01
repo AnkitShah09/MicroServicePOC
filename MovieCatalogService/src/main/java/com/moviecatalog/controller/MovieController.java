@@ -5,19 +5,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import com.moviecatalog.service.MovieCatalogService;
 
 @RestController
 @RequestMapping("/movie")
 public class MovieController {
-
+	
 	@Autowired
-	RestTemplate restTemplate;
+	MovieCatalogService movieCatalogService;
 
-	@GetMapping("/{movieName}")
+	@GetMapping(value = "/{movieName}",produces = "application/json")
 	public String getMovieDetailsByName(@PathVariable("movieName") String movieName) {
-		System.out.println("In movie catalog service");
-		String movieDetails = restTemplate.getForObject("http://movie-details-service/moviedetails/asf", String.class);
-		return movieDetails;
+		return movieCatalogService.getCompleteMovieDetails(movieName);
 	}
 }
