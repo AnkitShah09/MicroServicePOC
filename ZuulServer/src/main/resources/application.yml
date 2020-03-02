@@ -1,0 +1,21 @@
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+server:
+  port: 8762
+spring:
+  application:
+    name: zuul-server
+zuul:
+  ignored-services: '*'
+  routes:
+    movie-catalog-service:
+      path: /movie/**
+      service-id: movie-catalog-service
+    movie-details-service:
+      path: /moviedetails/**
+      service-id: movie-details-service
+    movie-ratings-service:
+      path: /movieratings/**
+      service-id: movie-ratings-service
