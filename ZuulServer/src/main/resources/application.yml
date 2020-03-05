@@ -7,15 +7,18 @@ server:
 spring:
   application:
     name: zuul-server
+ribbon:
+  ReadTimeout: 60000
 zuul:
   ignored-services: '*'
   routes:
     movie-catalog-service:
       path: /movie/**
       service-id: movie-catalog-service
-    movie-details-service:
-      path: /moviedetails/**
-      service-id: movie-details-service
-    movie-ratings-service:
-      path: /movieratings/**
-      service-id: movie-ratings-service
+#     Below should not be there as we only expose movie catalog service.
+#    movie-details-service:
+#      path: /moviedetails/**
+#      service-id: movie-details-service
+#    movie-ratings-service:
+#      path: /movieratings/**
+#      service-id: movie-ratings-service
